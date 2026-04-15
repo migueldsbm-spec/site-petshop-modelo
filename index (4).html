@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PataFeliz Pet Shop | Cuidado com Amor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              teal:    '#0E9E8E',
+              tealdk:  '#077A6E',
+              orange:  '#F97316',
+              orangelt:'#FFF4EC',
+              cream:   '#FDFAF6',
+              dark:    '#1C2B2A',
+              mid:     '#3D5C59',
+              light:   '#E6F5F3',
+            }
+          },
+          fontFamily: {
+            sans: ['Nunito', 'sans-serif'],
+            display: ['"Playfair Display"', 'serif'],
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.6s ease both',
+            'float':   'float 3s ease-in-out infinite',
+            'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%':   { opacity: 0, transform: 'translateY(24px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' },
+            },
+            float: {
+              '0%,100%': { transform: 'translateY(0)' },
+              '50%':     { transform: 'translateY(-8px)' },
+            },
+            pulseSoft: {
+              '0%,100%': { boxShadow: '0 0 0 0 rgba(249,115,22,0.5)' },
+              '50%':     { boxShadow: '0 0 0 12px rgba(249,115,22,0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+
+    /* Nav blur */
+    #navbar { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+    /* Hero blob */
+    .blob {
+      border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+      animation: morphBlob 8s ease-in-out infinite;
+    }
+    @keyframes morphBlob {
+      0%,100% { border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%; }
+      33%      { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+      66%      { border-radius: 54% 46% 38% 62% / 60% 44% 56% 40%; }
+    }
+
+    /* Paw print pattern */
+    .paw-bg {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='%230E9E8E' fill-opacity='0.06'%3E%3Ccircle cx='15' cy='10' r='4'/%3E%3Ccircle cx='28' cy='7' r='3'/%3E%3Ccircle cx='10' cy='22' r='3'/%3E%3Ccircle cx='28' cy='20' r='3'/%3E%3Cellipse cx='20' cy='32' rx='9' ry='11'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    /* Card hover lift */
+    .card-lift { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .card-lift:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(14,158,142,0.15); }
+
+    /* Fade-up stagger helper */
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+
+    /* Mobile menu */
+    #mobile-menu { transition: max-height 0.35s ease, opacity 0.3s ease; max-height: 0; opacity: 0; overflow: hidden; }
+    #mobile-menu.open { max-height: 400px; opacity: 1; }
+
+    /* Star rating */
+    .stars::before { content: '★★★★★'; color: #F97316; }
+  </style>
+</head>
+<body class="font-sans bg-brand-cream text-brand-dark antialiased">
+
+<!-- ===== FLOATING WHATSAPP ===== -->
+<a href="https://wa.me/5511994734216?text=Olá!%20Gostaria%20de%20agendar%20um%20banho%20e%20tosa%20para%20o%20meu%20pet.%20Pode%20me%20ajudar%3F"
+   target="_blank" rel="noopener noreferrer"
+   class="fixed bottom-6 right-5 z-50 flex items-center gap-2 bg-[#25D366] text-white px-4 py-3 rounded-full shadow-2xl animate-pulse-soft hover:scale-105 transition-transform">
+  <svg class="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.549 4.107 1.51 5.842L.057 23.512a.5.5 0 0 0 .602.633l5.807-1.52A11.932 11.932 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.858 9.858 0 0 1-5.032-1.378l-.36-.214-3.742.981.999-3.647-.234-.374A9.86 9.86 0 0 1 2.1 12C2.1 6.529 6.529 2.1 12 2.1S21.9 6.529 21.9 12 17.471 21.894 12 21.894z"/>
+  </svg>
+  <span class="text-sm font-bold hidden sm:inline">Fale conosco</span>
+</a>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-40 bg-white/80 border-b border-brand-light shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2 group">
+        <div class="w-9 h-9 bg-brand-teal rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+          <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M4.5 11c1.38 0 2.5-1.567 2.5-3.5S5.88 4 4.5 4 2 5.567 2 7.5 3.12 11 4.5 11zm15 0c1.38 0 2.5-1.567 2.5-3.5S20.88 4 19.5 4 17 5.567 17 7.5s1.12 3.5 2.5 3.5zM12 11c1.93 0 3.5-2.015 3.5-4.5S13.93 2 12 2s-3.5 2.015-3.5 4.5S10.07 11 12 11zm-5.5 1C4.57 12 3 14.015 3 16.5S4.57 21 6.5 21s3.5-2.015 3.5-4.5S8.43 12 6.5 12zm11 0c-1.93 0-3.5 2.015-3.5 4.5s1.57 4.5 3.5 4.5 3.5-2.015 3.5-4.5S19.43 12 17.5 12zM12 13c-2.67 0-8 1.337-8 4v1.5C4 19.88 5.12 21 6.5 21h11c1.38 0 2.5-1.12 2.5-2.5V17c0-2.663-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <span class="font-black text-xl text-brand-dark tracking-tight">Pata<span class="text-brand-teal">Feliz</span></span>
+      </a>
+
+      <!-- Desktop menu -->
+      <ul class="hidden md:flex items-center gap-7 text-sm font-700">
+        <li><a href="#servicos" class="text-brand-mid hover:text-brand-teal transition-colors font-semibold">Serviços</a></li>
+        <li><a href="#diferenciais" class="text-brand-mid hover:text-brand-teal transition-colors font-semibold">Diferenciais</a></li>
+        <li><a href="#depoimentos" class="text-brand-mid hover:text-brand-teal transition-colors font-semibold">Depoimentos</a></li>
+        <li><a href="#contato" class="text-brand-mid hover:text-brand-teal transition-colors font-semibold">Contato</a></li>
+        <li>
+          <a href="https://wa.me/5511994734216?text=Olá!%20Gostaria%20de%20agendar%20um%20banho%20e%20tosa%20para%20o%20meu%20pet." target="_blank"
+             class="bg-brand-orange text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-orange-500 transition-colors shadow-md">
+            Agendar
+          </a>
+        </li>
+      </ul>
+
+      <!-- Hamburger -->
+      <button id="menu-btn" class="md:hidden p-2 rounded-lg text-brand-mid hover:bg-brand-light transition-colors" aria-label="Abrir menu">
+        <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden">
+      <ul class="flex flex-col gap-1 pb-4 pt-1">
+        <li><a href="#servicos"    class="block py-2.5 px-3 rounded-lg font-semibold text-brand-mid hover:bg-brand-light hover:text-brand-teal transition-colors" onclick="closeMenu()">Serviços</a></li>
+        <li><a href="#diferenciais" class="block py-2.5 px-3 rounded-lg font-semibold text-brand-mid hover:bg-brand-light hover:text-brand-teal transition-colors" onclick="closeMenu()">Diferenciais</a></li>
+        <li><a href="#depoimentos" class="block py-2.5 px-3 rounded-lg font-semibold text-brand-mid hover:bg-brand-light hover:text-brand-teal transition-colors" onclick="closeMenu()">Depoimentos</a></li>
+        <li><a href="#contato"    class="block py-2.5 px-3 rounded-lg font-semibold text-brand-mid hover:bg-brand-light hover:text-brand-teal transition-colors" onclick="closeMenu()">Contato</a></li>
+        <li class="pt-2">
+          <a href="https://wa.me/5511994734216?text=Olá!%20Gostaria%20de%20agendar%20um%20banho%20e%20tosa%20para%20o%20meu%20pet." target="_blank"
+             class="block text-center bg-brand-orange text-white px-5 py-3 rounded-full font-bold hover:bg-orange-500 transition-colors shadow-md">
+            Agendar via WhatsApp
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="relative min-h-screen flex items-center pt-16 overflow-hidden paw-bg">
+
+  <!-- Background decoration -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="blob absolute -top-20 -right-32 w-96 h-96 bg-brand-light opacity-70"></div>
+    <div class="blob absolute bottom-0 -left-24 w-72 h-72 bg-brand-orangelt opacity-60" style="animation-delay:-4s"></div>
+  </div>
+
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+
+    <!-- Text -->
+    <div class="text-center md:text-left">
+      <span class="inline-block bg-brand-light text-brand-teal text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-5 animate-fade-up">🐾 Pet Shop &amp; Veterinária</span>
+      <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl leading-tight text-brand-dark mb-6 animate-fade-up stagger-1">
+        O cuidado que seu<br/>
+        <em class="text-brand-teal not-italic">melhor amigo</em><br/>
+        merece
+      </h1>
+      <p class="text-brand-mid text-base sm:text-lg leading-relaxed max-w-md mx-auto md:mx-0 mb-8 animate-fade-up stagger-2">
+        Banho, tosa, consultas veterinárias e muito amor. Tudo que o seu pet precisa num só lugar, com profissionais que tratam cada animal como parte da família.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center md:justify-start animate-fade-up stagger-3">
+        <a href="https://wa.me/5511994734216?text=Olá!%20Gostaria%20de%20agendar%20um%20banho%20e%20tosa%20para%20o%20meu%20pet.%20Pode%20me%20ajudar%3F"
+           target="_blank"
+           class="bg-brand-orange text-white font-bold text-base px-8 py-4 rounded-full shadow-xl hover:bg-orange-500 hover:shadow-orange-200/60 transition-all hover:-translate-y-0.5">
+          📅 Agendar Banho e Tosa
+        </a>
+        <a href="#servicos"
+           class="border-2 border-brand-teal text-brand-teal font-bold text-base px-8 py-4 rounded-full hover:bg-brand-light transition-colors">
+          Ver Serviços
+        </a>
+      </div>
+
+      <!-- Trust badges -->
+      <div class="flex items-center justify-center md:justify-start gap-6 mt-10 animate-fade-up stagger-4">
+        <div class="text-center">
+          <p class="font-black text-2xl text-brand-teal">+500</p>
+          <p class="text-xs text-brand-mid font-semibold">Pets atendidos</p>
+        </div>
+        <div class="w-px h-10 bg-brand-light"></div>
+        <div class="text-center">
+          <p class="font-black text-2xl text-brand-teal">4.9★</p>
+          <p class="text-xs text-brand-mid font-semibold">Avaliação média</p>
+        </div>
+        <div class="w-px h-10 bg-brand-light"></div>
+        <div class="text-center">
+          <p class="font-black text-2xl text-brand-teal">8 anos</p>
+          <p class="text-xs text-brand-mid font-semibold">De experiência</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero image -->
+    <div class="relative flex justify-center animate-float">
+      <div class="relative w-72 h-72 sm:w-96 sm:h-96">
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-teal/20 to-brand-orange/20 rounded-[40%_60%_50%_50%/50%_40%_60%_50%] blur-2xl"></div>
+        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=700&q=80&auto=format&fit=crop"
+             alt="Cachorro feliz sendo cuidado"
+             class="relative w-full h-full object-cover rounded-[40%_60%_50%_50%/50%_40%_60%_50%] shadow-2xl border-4 border-white" />
+        <!-- Floating badge -->
+        <div class="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl px-4 py-3 flex items-center gap-2 border border-brand-light">
+          <span class="text-2xl">🛁</span>
+          <div>
+            <p class="text-xs font-black text-brand-dark">Banho &amp; Tosa</p>
+            <p class="text-xs text-brand-teal font-semibold">Disponível hoje!</p>
+          </div>
+        </div>
+        <div class="absolute -top-4 -right-4 bg-brand-orange text-white rounded-2xl shadow-xl px-4 py-3 text-center">
+          <p class="text-xs font-black">Consulta</p>
+          <p class="text-xs font-semibold">Vet. 24h</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVIÇOS ===== -->
+<section id="servicos" class="py-20 bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <span class="inline-block bg-brand-light text-brand-teal text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">Nossos Serviços</span>
+      <h2 class="font-display text-3xl sm:text-4xl text-brand-dark">Tudo que o seu pet precisa</h2>
+      <p class="text-brand-mid mt-3 max-w-xl mx-auto">Oferecemos serviços completos com qualidade e carinho para garantir o bem-estar do seu animal de estimação.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <!-- Card 1 -->
+      <div class="card-lift bg-brand-cream rounded-3xl p-7 border border-brand-light text-center">
+        <div class="w-16 h-16 bg-brand-teal/10 rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <svg class="w-8 h-8 text-brand-teal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
+          </svg>
+        </div>
+        <h3 class="font-black text-lg text-brand-dark mb-2">Banho &amp; Tosa</h3>
+        <p class="text-brand-mid text-sm leading-relaxed">Higiene completa com produtos de alta qualidade, secagem profissional e acabamento impecável.</p>
+        <a href="https://wa.me/5511994734216?text=Olá!%20Quero%20agendar%20um%20banho%20e%20tosa." target="_blank"
+           class="mt-5 inline-block text-brand-teal text-sm font-bold hover:underline">Agendar →</a>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card-lift bg-brand-cream rounded-3xl p-7 border border-brand-light text-center">
+        <div class="w-16 h-16 bg-brand-orange/10 rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <svg class="w-8 h-8 text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+          </svg>
+        </div>
+        <h3 class="font-black text-lg text-brand-dark mb-2">Consultas Veterinárias</h3>
+        <p class="text-brand-mid text-sm leading-relaxed">Médicos veterinários experientes para check-ups, vacinas, exames e diagnósticos precisos.</p>
+        <a href="https://wa.me/5511994734216?text=Olá!%20Preciso%20agendar%20uma%20consulta%20veterinária." target="_blank"
+           class="mt-5 inline-block text-brand-orange text-sm font-bold hover:underline">Agendar →</a>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card-lift bg-brand-cream rounded-3xl p-7 border border-brand-light text-center">
+        <div class="w-16 h-16 bg-brand-teal/10 rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <svg class="w-8 h-8 text-brand-teal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+        </div>
+        <h3 class="font-black text-lg text-brand-dark mb-2">Hospedagem</h3>
+        <p class="text-brand-mid text-sm leading-relaxed">Espaço seguro e confortável para seu pet ficar quando você precisar viajar ou se ausentar.</p>
+        <a href="https://wa.me/5511994734216?text=Olá!%20Gostaria%20de%20saber%20sobre%20a%20hospedagem%20para%20meu%20pet." target="_blank"
+           class="mt-5 inline-block text-brand-teal text-sm font-bold hover:underline">Consultar →</a>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card-lift bg-brand-cream rounded-3xl p-7 border border-brand-light text-center">
+        <div class="w-16 h-16 bg-brand-orange/10 rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <svg class="w-8 h-8 text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
+        </div>
+        <h3 class="font-black text-lg text-brand-dark mb-2">Loja Pet</h3>
+        <p class="text-brand-mid text-sm leading-relaxed">Rações premium, acessórios, brinquedos, roupinhas e tudo mais para o seu pet ser feliz.</p>
+        <a href="https://wa.me/5511994734216?text=Olá!%20Quero%20saber%20sobre%20os%20produtos%20da%20loja." target="_blank"
+           class="mt-5 inline-block text-brand-orange text-sm font-bold hover:underline">Ver produtos →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALERIA ===== -->
+<section class="py-10 bg-brand-light overflow-hidden">
+  <div class="flex gap-4 animate-none" style="display:flex;gap:1rem;overflow:hidden;">
+    <div class="flex gap-4 min-w-max" style="animation: marquee 20s linear infinite;">
+      <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=200&q=80&auto=format&fit=crop" class="h-40 w-60 object-cover rounded-2xl shadow-md flex-shrink-0" alt="pet 1"/>
+      <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=300&h=200&q=80&auto=format&fit=crop" class="h-40 w-60 object-cover rounded-2xl shadow-md flex-shrink-0" alt="pet 2"/>
+      <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=200&q=80&auto=format&fit=crop" class="h-40 w-60 object-cover rounded-2xl shadow-md flex-shrink-0" alt="pet 3"/>
+      <img src="https://images.unsplash.com/photo-1601979031925-424e53b6caaa?w=300&h=200&q=80&auto=format&fit=crop" class="h-40 w-60 object-cover rounded-2xl shadow-md flex-shrink-0" alt="pet 4"/>
+      <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=300&h=200&q=80&auto=format&fit=crop" class="h-40 w-60 object-cover rounded-2xl shadow-md flex-shrink-0" alt="pet 5"/>
+      <!-- duplicate for seamless loop -->
+      <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=200&q=80&auto=format&fit=crop" class="h-40 w-60 object-cover rounded-2xl shadow-md flex-shrink-0" alt="pet 1"/>
+      <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=300&h=200&q=80&auto=format&fit=crop" class="h-40 w-60 object-cover rounded-2xl shadow-md flex-shrink-0" alt="pet 2"/>
+      <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=200&q=80&auto=format&fit=crop" class="h-40 w-60 object-cover rounded-2xl shadow-md flex-shrink-0" alt="pet 3"/>
+      <img src="https://images.unsplash.com/photo-1601979031925-424e53b6caaa?w=300&h=200&q=80&auto=format&fit=crop" class="h-40 w-60 object-cover rounded-2xl shadow-md flex-shrink-0" alt="pet 4"/>
+      <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=300&h=200&q=80&auto=format&fit=crop" class="h-40 w-60 object-cover rounded-2xl shadow-md flex-shrink-0" alt="pet 5"/>
+    </div>
+  </div>
+  <style>@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }</style>
+</section>
+
+<!-- ===== DIFERENCIAIS ===== -->
+<section id="diferenciais" class="py-20 paw-bg bg-brand-cream">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+
+      <!-- Image side -->
+      <div class="relative">
+        <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=700&q=80&auto=format&fit=crop"
+             alt="Veterinária cuidando de pet"
+             class="rounded-3xl shadow-2xl w-full object-cover h-96 md:h-[480px]" />
+        <div class="absolute -bottom-6 -right-4 bg-white rounded-3xl shadow-xl p-5 border border-brand-light max-w-[200px]">
+          <div class="flex gap-1 mb-2">
+            <span class="stars text-sm"></span>
+          </div>
+          <p class="text-xs font-semibold text-brand-dark">"Melhor pet shop da cidade! Meu Toby adora vir aqui."</p>
+          <p class="text-xs text-brand-mid mt-1 font-bold">— Ana Paula M.</p>
+        </div>
+      </div>
+
+      <!-- Text side -->
+      <div>
+        <span class="inline-block bg-brand-light text-brand-teal text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">Por que nos escolher?</span>
+        <h2 class="font-display text-3xl sm:text-4xl text-brand-dark mb-8">Cuidado de verdade,<br/>resultado que você <em class="text-brand-teal">vê</em></h2>
+
+        <div class="space-y-6">
+          <div class="flex gap-4 items-start">
+            <div class="w-12 h-12 bg-brand-teal rounded-2xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-black text-brand-dark text-base mb-1">Higiene &amp; Biossegurança</h4>
+              <p class="text-brand-mid text-sm leading-relaxed">Ambiente 100% higienizado entre cada atendimento. Produtos profissionais e seguros para a saúde do seu pet.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 items-start">
+            <div class="w-12 h-12 bg-brand-orange rounded-2xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-black text-brand-dark text-base mb-1">Profissionais Qualificados</h4>
+              <p class="text-brand-mid text-sm leading-relaxed">Equipe com formação técnica e atualização constante. Veterinários registrados no CRMV e tosadores certificados.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 items-start">
+            <div class="w-12 h-12 bg-brand-teal rounded-2xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-black text-brand-dark text-base mb-1">Amor por Animais</h4>
+              <p class="text-brand-mid text-sm leading-relaxed">Tratamos cada pet com paciência, gentileza e carinho genuíno. Seu animal sente a diferença e você também.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 items-start">
+            <div class="w-12 h-12 bg-brand-orange rounded-2xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-black text-brand-dark text-base mb-1">Acompanhamento em Tempo Real</h4>
+              <p class="text-brand-mid text-sm leading-relaxed">Você recebe fotos e atualizações do seu pet durante o atendimento diretamente no WhatsApp.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DEPOIMENTOS ===== -->
+<section id="depoimentos" class="py-20 bg-brand-dark relative overflow-hidden">
+  <!-- Decorative circle -->
+  <div class="absolute -top-20 -right-20 w-80 h-80 bg-brand-teal/10 rounded-full pointer-events-none"></div>
+  <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-brand-orange/10 rounded-full pointer-events-none"></div>
+
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <span class="inline-block bg-brand-teal/20 text-brand-teal text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">Depoimentos</span>
+      <h2 class="font-display text-3xl sm:text-4xl text-white">O que nossos clientes dizem</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Depoimento 1 -->
+      <div class="card-lift bg-white/5 backdrop-blur border border-white/10 rounded-3xl p-7">
+        <div class="stars text-lg mb-4"></div>
+        <p class="text-white/80 text-sm leading-relaxed mb-6">"Minha golden retriever, a Mel, sempre volta de lá linda e cheirosa. A equipe trata ela com tanto cuidado que ela entra animada! Recomendo de olhos fechados."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-brand-teal flex items-center justify-center font-black text-white text-sm">AP</div>
+          <div>
+            <p class="font-black text-white text-sm">Ana Paula Mendes</p>
+            <p class="text-white/50 text-xs">Tutora da Mel 🐕</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Depoimento 2 -->
+      <div class="card-lift bg-brand-teal rounded-3xl p-7 relative">
+        <span class="absolute top-5 right-6 text-4xl opacity-20 font-display">"</span>
+        <div class="stars text-lg mb-4"></div>
+        <p class="text-white text-sm leading-relaxed mb-6">"Levo meu gato Simba para a consulta veterinária todo mês. O Dr. Ricardo é extremamente competente e paciente. Meu pet está com a saúde perfeita."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-black text-white text-sm">CS</div>
+          <div>
+            <p class="font-black text-white text-sm">Carlos Souza</p>
+            <p class="text-white/70 text-xs">Tutor do Simba 🐈</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Depoimento 3 -->
+      <div class="card-lift bg-white/5 backdrop-blur border border-white/10 rounded-3xl p-7">
+        <div class="stars text-lg mb-4"></div>
+        <p class="text-white/80 text-sm leading-relaxed mb-6">"Precisei deixar meus dois spitz alemão hospedados por uma semana. Ficaram ótimos! Recebi fotos todo dia. Ambiente limpo, seguro e com muito amor."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-brand-orange flex items-center justify-center font-black text-white text-sm">MO</div>
+          <div>
+            <p class="font-black text-white text-sm">Marina Oliveira</p>
+            <p class="text-white/50 text-xs">Tutora do Bob e do Bilu 🐩</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center mt-14">
+      <p class="text-white/60 mb-5 text-sm">Pronto para proporcionar o melhor para o seu pet?</p>
+      <a href="https://wa.me/5511994734216?text=Olá!%20Gostaria%20de%20agendar%20um%20serviço%20para%20o%20meu%20pet." target="_blank"
+         class="inline-block bg-brand-orange text-white font-bold text-base px-10 py-4 rounded-full shadow-xl hover:bg-orange-500 transition-all hover:-translate-y-0.5">
+        📅 Agendar Agora via WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTATO / RODAPÉ ===== -->
+<footer id="contato" class="bg-white border-t border-brand-light">
+
+  <!-- Info bar -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+    <!-- Brand -->
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-9 h-9 bg-brand-teal rounded-xl flex items-center justify-center shadow-md">
+          <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M4.5 11c1.38 0 2.5-1.567 2.5-3.5S5.88 4 4.5 4 2 5.567 2 7.5 3.12 11 4.5 11zm15 0c1.38 0 2.5-1.567 2.5-3.5S20.88 4 19.5 4 17 5.567 17 7.5s1.12 3.5 2.5 3.5zM12 11c1.93 0 3.5-2.015 3.5-4.5S13.93 2 12 2s-3.5 2.015-3.5 4.5S10.07 11 12 11zm-5.5 1C4.57 12 3 14.015 3 16.5S4.57 21 6.5 21s3.5-2.015 3.5-4.5S8.43 12 6.5 12zm11 0c-1.93 0-3.5 2.015-3.5 4.5s1.57 4.5 3.5 4.5 3.5-2.015 3.5-4.5S19.43 12 17.5 12zM12 13c-2.67 0-8 1.337-8 4v1.5C4 19.88 5.12 21 6.5 21h11c1.38 0 2.5-1.12 2.5-2.5V17c0-2.663-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <span class="font-black text-xl text-brand-dark">Pata<span class="text-brand-teal">Feliz</span></span>
+      </div>
+      <p class="text-brand-mid text-sm leading-relaxed">Cuidando do seu melhor amigo com amor, profissionalismo e dedicação desde 2016.</p>
+      <!-- Social -->
+      <div class="flex gap-3 mt-5">
+        <a href="#" class="w-9 h-9 bg-brand-light rounded-xl flex items-center justify-center text-brand-mid hover:bg-brand-teal hover:text-white transition-all" aria-label="Instagram">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+        <a href="https://wa.me/5511994734216" target="_blank" class="w-9 h-9 bg-brand-light rounded-xl flex items-center justify-center text-brand-mid hover:bg-[#25D366] hover:text-white transition-all" aria-label="WhatsApp">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.118.549 4.107 1.51 5.842L.057 23.512a.5.5 0 0 0 .602.633l5.807-1.52A11.932 11.932 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.858 9.858 0 01-5.032-1.378l-.36-.214-3.742.981.999-3.647-.234-.374A9.86 9.86 0 012.1 12C2.1 6.529 6.529 2.1 12 2.1S21.9 6.529 21.9 12 17.471 21.894 12 21.894z"/></svg>
+        </a>
+        <a href="#" class="w-9 h-9 bg-brand-light rounded-xl flex items-center justify-center text-brand-mid hover:bg-blue-600 hover:text-white transition-all" aria-label="Facebook">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Horário -->
+    <div>
+      <h4 class="font-black text-brand-dark mb-4">Horário de Funcionamento</h4>
+      <ul class="space-y-2 text-sm text-brand-mid">
+        <li class="flex justify-between"><span>Segunda – Sexta</span><span class="font-semibold text-brand-dark">08h – 19h</span></li>
+        <li class="flex justify-between"><span>Sábado</span><span class="font-semibold text-brand-dark">08h – 17h</span></li>
+        <li class="flex justify-between"><span>Domingo</span><span class="font-semibold text-brand-dark">09h – 13h</span></li>
+      </ul>
+      <div class="mt-4 inline-flex items-center gap-1.5 bg-green-50 text-green-700 text-xs font-bold px-3 py-1.5 rounded-full">
+        <span class="w-1.5 h-1.5 bg-green-500 rounded-full inline-block animate-pulse"></span>
+        Aberto agora
+      </div>
+    </div>
+
+    <!-- Endereço -->
+    <div>
+      <h4 class="font-black text-brand-dark mb-4">Localização</h4>
+      <address class="not-italic text-brand-mid text-sm leading-relaxed">
+        Rua das Flores, 123<br/>
+        Jardim América<br/>
+        São Paulo – SP, 01234-567
+      </address>
+      <a href="https://maps.google.com/?q=Rua+das+Flores,+123,+São+Paulo" target="_blank"
+         class="mt-3 inline-flex items-center gap-1 text-brand-teal text-sm font-semibold hover:underline">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Ver no mapa
+      </a>
+    </div>
+
+    <!-- CTA final -->
+    <div>
+      <h4 class="font-black text-brand-dark mb-4">Agende agora</h4>
+      <p class="text-brand-mid text-sm mb-4">Clique abaixo para iniciar uma conversa no WhatsApp e garantir a vaga do seu pet.</p>
+      <a href="https://wa.me/5511994734216?text=Olá!%20Gostaria%20de%20agendar%20um%20serviço%20para%20o%20meu%20pet." target="_blank"
+         class="flex items-center justify-center gap-2 bg-brand-teal text-white font-bold text-sm px-5 py-3 rounded-full hover:bg-brand-tealdk transition-colors shadow-md">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.118.549 4.107 1.51 5.842L.057 23.512a.5.5 0 0 0 .602.633l5.807-1.52A11.932 11.932 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.858 9.858 0 01-5.032-1.378l-.36-.214-3.742.981.999-3.647-.234-.374A9.86 9.86 0 012.1 12C2.1 6.529 6.529 2.1 12 2.1S21.9 6.529 21.9 12 17.471 21.894 12 21.894z"/></svg>
+        WhatsApp
+      </a>
+      <p class="text-brand-mid text-xs mt-3">(11) 9 9473-4216</p>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="border-t border-brand-light py-5 px-4 text-center">
+    <p class="text-brand-mid text-xs">© 2025 PataFeliz Pet Shop. Todos os direitos reservados. Feito com 🐾 e muito amor.</p>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu toggle
+  const btn = document.getElementById('menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  btn.addEventListener('click', () => {
+    menu.classList.toggle('open');
+    iconOpen.classList.toggle('hidden');
+    iconClose.classList.toggle('hidden');
+  });
+
+  function closeMenu() {
+    menu.classList.remove('open');
+    iconOpen.classList.remove('hidden');
+    iconClose.classList.add('hidden');
+  }
+
+  // IntersectionObserver for fade-up animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-fade-up');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.card-lift, section h2, section p').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
